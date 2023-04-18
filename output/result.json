@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "Spring",
+    "description": "InDepth of Spring",
+    "published": true
+  },
+  {
+    "id": 2,
+    "title": "Java",
+    "description": "InDepth of Java",
+    "published": true
+  },
+  {
+    "id": 3,
+    "title": "react js",
+    "description": "InDepth of react js",
+    "published": true
+  },
+  {
+    "id": 4,
+    "title": "hibernate",
+    "description": "InDepth of hibernate",
+    "published": true
+  },
+  {
+    "id": 5,
+    "title": "servlet",
+    "description": "InDepth of servlet",
+    "published": false
+  },
+  {
+    "id": 6,
+    "title": "jsp",
+    "description": "InDepth of jsp",
+    "published": false
+  },
+  {
+    "id": 7,
+    "title": "restful",
+    "description": "InDepth of restful service",
+    "published": true
+  }
+]
