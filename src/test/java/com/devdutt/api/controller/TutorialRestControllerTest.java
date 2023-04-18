@@ -14,9 +14,9 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -98,4 +98,25 @@ public class TutorialRestControllerTest {
         when(tutorialRepository.findById(id)).thenReturn(Optional.empty());
         mockMvc.perform(get("/apis/tutorials/{id}", id)).andExpect(status().isNotFound()).andDo(print());
     }
+
+    //------------------------------------------------------------------------------------------------------------------------------//
+
+    @Test
+    public void shouldUpdateTutorial() throws Exception {
+        long id = 1L;
+        Tutorial tutorial = new Tutorial(id, "Springboot", "Description-1", false);
+        Tutorial updateTutorial = new Tutorial(id, "updated", "updated", true);
+
+        when(tutorialRepository.findById(id)).thenReturn(Optional.of(tutorial));
+        when(tutorialRepository.save(any(Tutorial.class))).thenReturn(updateTutorial);
+
+        mockMvc.perform(put("/apis/tutorials/{id}", id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updateTutorial))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(updateTutorial.getTitle()))
+                .andExpect(jsonPath("$.description").value(updateTutorial.getDescription()))
+                .andExpect(jsonPath("$.published").value(updateTutorial.isPublished()))
+                .andDo(print());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------//
+
 }
