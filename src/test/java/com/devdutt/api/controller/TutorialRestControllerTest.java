@@ -12,10 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,6 +39,7 @@ public class TutorialRestControllerTest {
                 .content(objectMapper.writeValueAsString(tutorial))).andExpect(status().isCreated()).andDo(print());
     }
 
+    //------------------------------------------------------------------------------------------------------------------------------//
     @Test
     public void shouldReturnListOfTutorials() throws Exception {
         List<Tutorial> tutorials = new ArrayList<>(
@@ -78,5 +76,26 @@ public class TutorialRestControllerTest {
 
         when(tutorialRepository.findByTitleContaining(title)).thenReturn(tutorials);
         mockMvc.perform(get("/apis/tutorials").params(paramsMap)).andExpect(status().isNoContent()).andDo(print());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------//
+
+    @Test
+    public void shouldReturnTutorial() throws Exception {
+        long id = 1L;
+        Tutorial tutorial = new Tutorial(id, "Springboot", "Description-1", true);
+        when(tutorialRepository.findById(id)).thenReturn(Optional.of(tutorial));
+        mockMvc.perform(get("/apis/tutorials/{id}", id)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.title").value(tutorial.getTitle()))
+                .andExpect(jsonPath("$.description").value(tutorial.getDescription()))
+                .andExpect(jsonPath("$.published").value(tutorial.isPublished())).andDo(print());
+    }
+
+    @Test
+    public void shouldReturnNotFoundTutorial() throws Exception {
+        long id = 1L;
+        when(tutorialRepository.findById(id)).thenReturn(Optional.empty());
+        mockMvc.perform(get("/apis/tutorials/{id}", id)).andExpect(status().isNotFound()).andDo(print());
     }
 }
