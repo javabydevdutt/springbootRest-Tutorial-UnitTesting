@@ -141,8 +141,4 @@ public class TutorialRestControllerTest {
         doNothing().when(tutorialRepository).deleteAll();
         mockMvc.perform(delete("/apis/tutorials/")).andExpect(status().isNoContent()).andDo(print());
     }
-
-    //------------------------------------------------------------------------------------------------------------------------------//
-
-    public void
 }
