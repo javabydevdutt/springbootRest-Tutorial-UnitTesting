@@ -71,4 +71,37 @@ public class TutorialRestController {
         }
     }
 
+    @DeleteMapping("/tutorials/{id}")
+    public ResponseEntity<Tutorial> deleteTutorial(@PathVariable("id") long id) {
+        try {
+            repository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/tutorials")
+    public ResponseEntity<HttpStatus> deleteAllTutorials() {
+        try {
+            repository.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/tutorials/published")
+    public ResponseEntity<List<Tutorial>> findByPublished() {
+        try {
+            List<Tutorial> tutorials = repository.findByPublished(true);
+
+            if (tutorials.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(tutorials, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }//class

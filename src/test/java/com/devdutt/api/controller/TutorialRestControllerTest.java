@@ -15,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -117,6 +118,31 @@ public class TutorialRestControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    void shouldReturnNotFoundUpdateTutorial() throws Exception {
+        long id = 1L;
+        Tutorial updatedtutorial = new Tutorial(id, "Updated", "Updated", true);
+        when(tutorialRepository.findById(id)).thenReturn(Optional.empty());
+        when(tutorialRepository.save(any(Tutorial.class))).thenReturn(updatedtutorial);
+
+        mockMvc.perform(put("/apis/tutorials/{id}", id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(updatedtutorial))).andExpect(status().isNotFound()).andDo(print());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------------------//
+    @Test
+    public void shouldDeleteTutorials() throws Exception {
+        long id = 1L;
+        doNothing().when(tutorialRepository).deleteById(id);
+        mockMvc.perform(delete("/apis/tutorials/{id}", id)).andExpect(status().isNoContent()).andDo(print());
+    }
+
+    @Test
+    public void shouldDeleteAllTutorials() throws Exception {
+        doNothing().when(tutorialRepository).deleteAll();
+        mockMvc.perform(delete("/apis/tutorials/")).andExpect(status().isNoContent()).andDo(print());
+    }
+
     //------------------------------------------------------------------------------------------------------------------------------//
 
+    public void
 }
