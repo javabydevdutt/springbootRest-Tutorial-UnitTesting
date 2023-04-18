@@ -39,7 +39,6 @@ public class TutorialRestControllerTest {
         mockMvc.perform(post("/apis/tutorials").contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(tutorial))).andExpect(status().isCreated()).andDo(print());
     }
-
     //------------------------------------------------------------------------------------------------------------------------------//
     @Test
     public void shouldReturnListOfTutorials() throws Exception {

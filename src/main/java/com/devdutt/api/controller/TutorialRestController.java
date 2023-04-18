@@ -21,30 +21,22 @@ public class TutorialRestController {
 
     @PostMapping("/tutorials")
     public ResponseEntity<Tutorial> createTutorial(@RequestBody Tutorial tutorial) {
-        try {
-            Tutorial result = repository.save(tutorial);
-            return new ResponseEntity<>(result, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }//catch
+        Tutorial result = repository.save(tutorial);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }//method
 
     @GetMapping("/tutorials")
     public ResponseEntity<List<Tutorial>> getAllTutorials(@RequestParam(required = false) String title) {
         List<Tutorial> tutorials = new ArrayList<>();
-        try {
-            if (title == null)
-                repository.findAll().forEach(tutorials::add);
-            else
-                repository.findByTitleContaining(title).forEach(tutorials::add);
+        if (title == null)
+            repository.findAll().forEach(tutorials::add);
+        else
+            repository.findByTitleContaining(title).forEach(tutorials::add);
 
-            if (tutorials.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(tutorials, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        if (tutorials.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(tutorials, HttpStatus.OK);
     }
 
     @GetMapping("/tutorials/{id}")
@@ -73,21 +65,13 @@ public class TutorialRestController {
 
     @DeleteMapping("/tutorials/{id}")
     public ResponseEntity<Tutorial> deleteTutorial(@PathVariable("id") long id) {
-        try {
-            repository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        repository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/tutorials")
     public ResponseEntity<HttpStatus> deleteAllTutorials() {
-        try {
-            repository.deleteAll();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        repository.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }//class
